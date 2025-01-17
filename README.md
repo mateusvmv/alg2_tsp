@@ -7,15 +7,15 @@ Para resolver o problema do caixeiro viajante:
 make
 ./bin/solve
 > Uso: ./bin/solve <arquivo> <algoritmo>
-time ./bin/solve random/10.tsp cf
+./bin/solve random/10.tsp cf
 > name is rand10
 > comment is 10 random cities TSP
 > Total cost was 759310.393790
-time ./bin/solve random/10.tsp tatt
+./bin/solve random/10.tsp tatt
 > name is rand10
 > comment is 10 random cities TSP
 > Total cost was 677562.403818
-time ./bin/solve random/10.tsp bab
+./bin/solve random/10.tsp bab
 > name is rand10
 > comment is 10 random cities TSP
 > Total cost was 563389.592504
