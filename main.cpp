@@ -10,6 +10,12 @@
 
 double calculate_cost(int n, double (*coords)[2], int *tsp);
 
+// Algoritmo de Prim para Árvore Geradora Mínima
+// Recebe n, o número de vértices, e coords, uma array de n coordenadas
+// Coloca o resultado na array par, que deve ter capacidade para n elementos
+// par[i] = j diz que o pai do vértice i na árvore geradora mínima é o vértice j
+// A função roda em O(n^2), com O(n) de memória.
+// As arestas são implícitas pela coordenada, por isso O(n^2) não entra no uso de memória.
 void prim(int n, double (*coords)[2], int *par) {
     double *small = new double[n];
     memset(par, 0, n * sizeof(int));
@@ -33,6 +39,11 @@ void prim(int n, double (*coords)[2], int *par) {
     delete[] small;
 }
 
+// Retorna listas de crianças para cada vértice da árvore
+// Crianças de i estão entre child[i] (incluso) e child[i+1] (excluso)
+// Portanto, child precisa de ter capacidade n+1
+// E data precisad e ter capacidade n e armazena os dados apontados por child[i]
+// A função roda em O(n)
 void tree_children(int n, int *par, int **child, int *data) {
     memset(data, 0, n * sizeof(int));
     for(int i = 0; i < n; i += 1)
@@ -48,6 +59,10 @@ void tree_children(int n, int *par, int **child, int *data) {
             assert(par[*c] == i);
 }
 
+// Algoritmo Twice around the Tree
+// Recebe um número de vértices n, e n coordenadas
+// O resultado é colocado na array tsp, que deve ter capacidade n
+// A função roda em O(n^2) e usa O(n) de memória
 void tatt(int n, double (*coords)[2], int *tsp) {
     memset(tsp, 0, n * sizeof(int));
 
@@ -80,6 +95,12 @@ void tatt(int n, double (*coords)[2], int *tsp) {
     delete[] cd;
 }
 
+// Algoritmo Twice around the Tree
+// Recebe um número de vértices n, e n coordenadas
+// O resultado é colocado na array tsp, que deve ter capacidade n
+// A função roda em O(n^4) e usa O(n^2) de memória
+// Por causa do uso da lib lemon, não foi possível usar O(n) de memória aqui
+// As arestas tiveram de ser explícitas
 void christofides(int n, double (*coords)[2], int *tsp) {
     memset(tsp, 0, n * sizeof(int));
 
@@ -151,6 +172,10 @@ void christofides(int n, double (*coords)[2], int *tsp) {
     delete[] cd;
 }
 
+// Recursão do Branch and Bound
+// Exponencial, O(n) a cada chamada
+// O cálculo dos limites inferior e superior é bem optimizado e constante
+// O uso de memória é O(1), dessa função.
 void branch_and_bound_recur(
     int i,
     int n,
@@ -200,6 +225,9 @@ void branch_and_bound_recur(
         vis[b] = 0;
     }
 }
+// Algorítmo Branch and Bound
+// Exponencial na runtime
+// O uso de memória é O(n), cada chamada recursiva usa O(1) de memória
 void branch_and_bound(int n, double (*coords)[2], int *tsp) {
     double (*most)[2] = new double[n][2];
     double (*least)[2] = new double[n][2];
@@ -252,6 +280,7 @@ void branch_and_bound(int n, double (*coords)[2], int *tsp) {
     delete[] temp_tsp;
 }
 
+// Apenas calcula o custo de uma solução do TSP
 double calculate_cost(int n, double (*coords)[2], int *tsp) {
     bool *vis = new bool[n];
     memset(vis, 0, n * sizeof(bool));
