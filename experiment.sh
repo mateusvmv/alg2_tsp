@@ -4,9 +4,8 @@
 # Define constants
 OUTPUT_DIR="random"
 RESULTS_FILE="results.log"
-MAX_TIME=1800  # 30 minutes in seconds
-# MAX_TIME=3600  # 30 minutes in seconds
-NUMBER=3       # Starting number
+MAX_TIME=1800  # 30 minutes
+NUMBER=3
 MAX_JOBS=4
 
 cleanup() {
@@ -15,7 +14,6 @@ cleanup() {
     exit 1
 }
 
-# Trap SIGINT (Ctrl+C), SIGTERM, and other common termination signals
 trap cleanup SIGINT SIGTERM
 
 # Ensure the output directory exists
@@ -52,8 +50,6 @@ process_iteration() {
     local solve_exit_code=$?
 
     local end_time=$(date +%s%3N)
-
-    # Calculate elapsed time
     local elapsed_time=$((end_time - start_time))
 
     # Check if the process was terminated by timeout
@@ -70,17 +66,13 @@ process_iteration() {
     echo "Run for $filename completed in $elapsed_time ms."
 }
 
-# Main loop
 current_jobs=0
-
 while [[ $TIMED_OUT == 0 ]]; do
     if ((current_jobs < MAX_JOBS)); then
-        # Start a new job
         process_iteration "$NUMBER" "$OUTPUT_DIR" "$RESULTS_FILE" "$MAX_TIME" &
         ((current_jobs++))
         ((NUMBER++))
     else
-        # Wait for any job to finish before starting a new one
         wait -n
         ((current_jobs--))
     fi
